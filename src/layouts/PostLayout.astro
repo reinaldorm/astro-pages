@@ -34,13 +34,13 @@ const pubDate =  new Intl.DateTimeFormat('en-US', {
             <slot />
         </div>
         <div class="col-[2/-1] sticky top-[5svh]">
-            <PostData sep iconURL="/assets/calendar.svg" head="Posted">
+            <PostData sep iconURL="/astro-pages/assets/calendar.svg" head="Posted">
                 <span style="color: #909090;">{pubDate}</span>
             </PostData>
-            <PostData sep flex iconURL="/assets/tag.svg" head="Tags">
+            <PostData sep flex iconURL="/astro-pages/assets/tag.svg" head="Tags">
                 {frontmatter.tags.map((tag: string) => <PostTag name={tag} />)}
             </PostData>
-            <PostData iconURL="/assets/pen.svg" head="Author">
+            <PostData iconURL="/astro-pages/assets/pen.svg" head="Author">
                 {frontmatter.author}
                 <span class=" text-gray-400 block">Frontend Developer</span>
             </PostData>
