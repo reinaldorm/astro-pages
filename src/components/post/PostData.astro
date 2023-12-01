@@ -1,0 +1,21 @@
+---
+interface Props {
+    head: string;
+    iconURL: string;
+    sep?: boolean;
+    flex?: boolean;
+}
+
+const { head, iconURL, sep, flex } = Astro.props;
+---
+
+<div class="mb-6 max-sm:mb-2 last:mb-0">
+    <div class="flex items-center justify-between">
+        <h4 class="leading-[1.3] text-gray-900 mb-3">{head}</h4>
+        <img src={iconURL} alt={head}>
+    </div>
+    <div class={`${flex ? "flex flex-wrap gap-3" : "block"} mb-6`}>
+        <slot />
+    </div>
+    {sep ? <span class="h-1 bg-slate-100 block"></span> : ""}
+</div>

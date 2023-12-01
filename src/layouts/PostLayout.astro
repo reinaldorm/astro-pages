@@ -1,0 +1,218 @@
+---
+import PostData from '@components/post/PostData.astro';
+import PostTag from '@components/post/PostTag.astro';
+
+import  '@fontsource/inter/400.css';
+import  '@fontsource/inter/500.css';
+import  '@fontsource/inter/700.css';
+import '../styles/global.css';
+
+const { frontmatter } = Astro.props;
+const pubDate =  new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'long',
+}).format(new Date(frontmatter.date));
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />            
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{frontmatter.title}</title>
+  </head>
+  <body>
+    <header class="flex justify-between items-center mb-16 max-sm:mb-8">
+        <div>
+            <h1 class="text-gray-900 text-4xl font-bold mb-2 max-sm:text-2xl">{frontmatter.title}</h1>
+            <h2 class="text-gray-500">{frontmatter.description}</h2>
+        </div>
+        <img src={frontmatter.image.url} alt={frontmatter.image.alt} class="w-8 max-sm:w-6">
+    </header>
+    <main class="grid grid-cols-content max-sm:block items-start gap-x-16">
+        <div class="post-content col-[1/2] max-sm:mb-6">
+            <slot />
+        </div>
+        <div class="col-[2/-1] sticky top-[5svh]">
+            <PostData sep iconURL="/assets/calendar.svg" head="Posted">
+                <span style="color: #909090;">{pubDate}</span>
+            </PostData>
+            <PostData sep flex iconURL="/assets/tag.svg" head="Tags">
+                {frontmatter.tags.map((tag: string) => <PostTag name={tag} />)}
+            </PostData>
+            <PostData iconURL="/assets/pen.svg" head="Author">
+                {frontmatter.author}
+                <span class=" text-gray-400 block">Frontend Developer</span>
+            </PostData>
+        </div>
+    </main>
+    <footer class="mt-8">
+        <a href="/" class="text-primary-400 underline flex gap-x-1 items-center">
+            Go back to home
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.1667 16.375L7 12M7 12L11.1667 7.625M7 12H17" stroke="#0085FF" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+    .post-content > *:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+    
+    .post-content h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+    }
+    
+    .post-content h2 {
+        font-size: 2.25rem;
+        font-weight: 600;
+    }
+    
+    .post-content h3 {
+        font-size: 2rem;
+        font-weight: 500;
+    }
+    
+    .post-content h4 {
+        font-size: 1.75rem;
+        font-weight: 500;
+    }
+    
+    .post-content h5 {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    .post-content h6 {
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .post-content p code {
+        padding-inline: 0.25rem;
+        display: inline-block;
+        border-radius: 0.125rem;
+        background-color: #333;
+        color: #fff;
+        font-size: 0.875rem;
+    }
+
+    .post-content p img {
+        max-width: 100%;
+    }
+
+    .post-content blockquote {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        background-color: #efefff;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .post-content blockquote::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        display: block;
+        height: 100%;
+        width: 0.25rem;
+        background-color: rgb(148, 36, 253);
+    }
+
+    .post-content pre {
+        position: relative;
+        padding: 1rem;
+        border-radius: 0.125rem;
+    }
+
+    .post-content pre .copy {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .post-content pre .copy:hover {
+        opacity: 0.75;
+    }
+
+    .post-content pre.copied::before {
+        content: "Copied!";
+        display: block;
+        position: absolute;
+        background-color: #00B553;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem 0.25rem 0rem 0.25rem;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+        top: 1rem;
+        right: 3rem;
+        animation: show-up 1s ease;
+        font-size: 0.75rem;
+        opacity: 0;
+    }
+
+    @keyframes show-up {
+        0% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        30%,
+        70% {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+    }
+
+    @media screen and (max-width: 640px) {
+        .post-content pre *,
+        .post-content code {
+            font-size: 0.75rem;
+        }
+
+        .post-content pre .copy {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const code_blocks = document.querySelectorAll("pre");
+
+    function handleCopy(text: string, block: HTMLElement) {
+        navigator.clipboard.writeText(text);
+
+        if (!block.className.includes("copied")) {
+            block.classList.add("copied");
+            setTimeout(() => block.classList.remove("copied"), 1250);
+        }
+    }
+
+    code_blocks.forEach(block => {
+        const copyButton = document.createElement("button");
+        const copyIcon = document.createElement("img");
+
+        copyIcon.src = "/assets/copy.svg";
+        copyIcon.alt = "copy-code";
+
+        copyButton.classList.add("copy");
+        copyButton.appendChild(copyIcon);
+        copyButton.addEventListener("click", () => handleCopy(block.textContent!, block));
+
+        block.appendChild(copyButton);
+    })
+
+</script>

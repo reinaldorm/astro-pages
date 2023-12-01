@@ -1,0 +1,16 @@
+---
+import Link from "@components/generic/Link.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    url: string;
+}
+
+const { title, description, url } = Astro.props;
+---
+
+<li class="mb-4">
+    <Link href={url}>{title}</Link>
+    <p class="text-gray-600 text-sm">{description}</p>
+</li>

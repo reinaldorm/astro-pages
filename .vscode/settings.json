@@ -1,0 +1,9 @@
+{
+	"files.exclude": {
+		"**.git**": true,
+		"**.json": true,
+		"README**": true,
+		"node_modules": true,
+		".vscode": true
+	}
+}
